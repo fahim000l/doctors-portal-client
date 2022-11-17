@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { format } from 'date-fns';
+import { AuthContext } from '../../../../../contexts/AuthProvider';
+import toast from 'react-hot-toast';
 
-const BookingModal = ({ treatment, selectedDate, setTreatment }) => {
+const BookingModal = ({ treatment, selectedDate, setTreatment, refetch }) => {
 
+    const { user } = useContext(AuthContext);
     const { name, slots } = treatment;
 
     const handleSubmit = (event) => {
@@ -24,8 +27,27 @@ const BookingModal = ({ treatment, selectedDate, setTreatment }) => {
             pathentPhoneNumber: phone
         };
 
-        console.log(bookingInfo);
-        setTreatment(null)
+        fetch('http://localhost:5000/bookings', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(bookingInfo)
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                if (data.acknowledged) {
+                    setTreatment(null);
+                    toast.success('Booking Confirmed');
+                    refetch();
+                }
+                else {
+                    setTreatment(null);
+                    toast.error(data.message);
+                }
+            })
+
     }
 
 
@@ -46,9 +68,9 @@ const BookingModal = ({ treatment, selectedDate, setTreatment }) => {
                                 >{slot}</option>)
                             }
                         </select>
-                        <input name='patientName' type="text" placeholder="Name" className="input input-bordered w-full mt-[23px]" required />
+                        <input name='patientName' defaultValue={user?.displayName} readOnly type="text" placeholder="Name" className="input input-bordered w-full mt-[23px]" required />
+                        <input name='email' defaultValue={user?.email} type="email" placeholder="Email" className="input input-bordered w-full mt-[23px]" required />
                         <input name='phone' type="text" placeholder="Phone Number" className="input input-bordered w-full mt-[23px]" required />
-                        <input name='email' type="email" placeholder="Email" className="input input-bordered w-full mt-[23px]" required />
                         <button type="submit" className='btn btn-accent w-full mt-[23px]'>SUBMIT</button>
                     </form>
                 </div>
