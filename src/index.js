@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'react-day-picker/dist/style.css';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import AuthProvider from './contexts/AuthProvider';
 import {
   QueryClient,

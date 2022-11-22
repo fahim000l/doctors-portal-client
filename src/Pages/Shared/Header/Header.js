@@ -51,6 +51,7 @@ const Header = () => {
                     }
                 </ul>
             </div>
+            <label htmlFor="dashboardDrawer" className="btn btn-primary drawer-button lg:hidden">Open Menu</label>
         </div>
     );
 };

@@ -2,7 +2,6 @@ import React from 'react';
 
 const ReviewCard = ({ review }) => {
 
-    console.log(review);
     const { details, paticentInfo } = review;
     const { image, livingIn, patientName } = paticentInfo;
 
